@@ -401,6 +401,7 @@ Sys_GetEvent
 ================
 */
 sysEvent_t Sys_GetEvent() {
+	SDL_Joystick* dualshock = SDL_JoystickOpen(1);
 	SDL_Event ev;
 	sysEvent_t res = { };
 	byte key;
@@ -595,6 +596,19 @@ sysEvent_t Sys_GetEvent() {
 			mouse_polls.Append(mouse_poll_t(M_DELTAY, ev.motion.yrel));
 
 			return res;
+
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+
+		case SDL_JOYAXISMOTION:
+			printf("JOYAXISMOTION was triggered\n");
+			res.evType = SE_JOYSTICK_AXIS;
+			res.evValue = ev.jaxis.axis;
+			res.evValue2 = ev.jaxis.value;
+
+			axis_polls.Append(axis_poll_t(ev.jaxis.axis, ev.jaxis.value));
+			printf("%i,%i\n", ev.jaxis.axis, ev.jaxis.value);
+			return res;
+#endif
 
 #if SDL_VERSION_ATLEAST(2, 0, 0)
 		case SDL_MOUSEWHEEL:
