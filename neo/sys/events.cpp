@@ -297,6 +297,7 @@ Sys_InitInput
 void Sys_InitInput() {
 	kbd_polls.SetGranularity(64);
 	mouse_polls.SetGranularity(64);
+	axis_polls.SetGranularity(64);
 
 #if !SDL_VERSION_ATLEAST(2, 0, 0)
 	SDL_EnableUNICODE(1);
@@ -600,13 +601,17 @@ sysEvent_t Sys_GetEvent() {
 #if SDL_VERSION_ATLEAST(2, 0, 0)
 
 		case SDL_JOYAXISMOTION:
-			printf("JOYAXISMOTION was triggered\n");
 			res.evType = SE_JOYSTICK_AXIS;
-			res.evValue = ev.jaxis.axis;
-			res.evValue2 = ev.jaxis.value;
-
-			axis_polls.Append(axis_poll_t(ev.jaxis.axis, ev.jaxis.value));
-			printf("%i,%i\n", ev.jaxis.axis, ev.jaxis.value);
+			if( ev.jaxis.axis <= 6)
+			{
+				res.evValue = ev.jaxis.axis;
+				res.evValue2 = ev.jaxis.value;
+				if(res.evValue == 0)
+				{
+					axis_polls.Append(axis_poll_t(AXIS_SIDE, ev.jaxis.value));
+				}
+				printf("%i,%i\n", ev.jaxis.axis, ev.jaxis.value);
+			}
 			return res;
 #endif
 
@@ -713,6 +718,7 @@ void Sys_ClearEvents() {
 
 	kbd_polls.SetNum(0, false);
 	mouse_polls.SetNum(0, false);
+	axis_polls.SetNum(0, false);
 }
 
 /*
@@ -791,4 +797,36 @@ Sys_EndMouseInputEvents
 */
 void Sys_EndMouseInputEvents() {
 	mouse_polls.SetNum(0, false);
+}
+
+/*
+================
+Sys_PollJoystickInputEvents
+================
+*/
+int Sys_PollJoystickInputEvents() {
+	return mouse_polls.Num();
+}
+
+/*
+================
+Sys_ReturnJoystickInputEvent
+================
+*/
+int	Sys_ReturnJoystickInputEvent(const int n, int &axis, int &value) {
+	if (n >= axis_polls.Num())
+		return 0;
+
+	axis = axis_polls[n].axis;
+	value = axis_polls[n].value;
+	return 1;
+}
+
+/*
+================
+Sys_EndJoystickInputEvents
+================
+*/
+void Sys_EndJoystickInputEvents() {
+	axis_polls.SetNum(0, false);
 }
