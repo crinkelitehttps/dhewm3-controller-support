@@ -176,6 +176,12 @@ int				Sys_PollMouseInputEvents( void );
 int				Sys_ReturnMouseInputEvent( const int n, int &action, int &value );
 void			Sys_EndMouseInputEvents( void );
 
+//myedit
+// joystick input polling	
+int 				Sys_PollJoystickInputEvents( void );
+int				Sys_ReturnJoystickInputEvent( const int n, int &axis, int &value );
+void				Sys_EndJoystickInputEvents( void );
+
 // when the console is down, or the game is about to perform a lengthy
 // operation like map loading, the system can release the mouse cursor
 // when in windowed mode
@@ -361,7 +367,8 @@ public:
 
 	virtual sysEvent_t		GenerateMouseButtonEvent( int button, bool down ) = 0;
 	virtual sysEvent_t		GenerateMouseMoveEvent( int deltax, int deltay ) = 0;
-
+	//myedit
+	virtual sysEvent_t		GenerateJoystickMoveEvent( int axis, int value ) = 0;
 	virtual void			OpenURL( const char *url, bool quit ) = 0;
 	virtual void			StartProcess( const char *exePath, bool quit ) = 0;
 };

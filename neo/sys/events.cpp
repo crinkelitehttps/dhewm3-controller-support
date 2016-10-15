@@ -90,8 +90,22 @@ struct mouse_poll_t {
 	}
 };
 
+struct axis_poll_t {
+	int axis;
+	int value;
+
+	axis_poll_t() {
+	}
+
+	axis_poll_t(int a, int v) {
+		axis = a;
+		value = v;
+	}
+};
+
 static idList<kbd_poll_t> kbd_polls;
 static idList<mouse_poll_t> mouse_polls;
+static idList<axis_poll_t> axis_polls;
 
 static byte mapkey(SDL_Keycode key) {
 	switch (key) {
@@ -300,6 +314,7 @@ Sys_ShutdownInput
 void Sys_ShutdownInput() {
 	kbd_polls.Clear();
 	mouse_polls.Clear();
+	axis_polls.Clear();
 }
 
 /*
