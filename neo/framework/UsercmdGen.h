@@ -98,8 +98,6 @@ public:
 	short		angles[3];						// view angles
 	short		mx;								// mouse delta x
 	short		my;								// mouse delta y
-	//short axisNumber;
-	//int axisValue;
 	signed char impulse;						// impulse command
 	byte		flags;							// additional flags
 	int			sequence;						// just for debugging

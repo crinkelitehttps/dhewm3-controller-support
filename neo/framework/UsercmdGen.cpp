@@ -1039,9 +1039,17 @@ idUsercmdGenLocal::Joystick
 ===============
 */
 void idUsercmdGenLocal::Joystick( void ) {
-	memset( joystickAxis, 0, sizeof( joystickAxis ) );
+	//memset( joystickAxis, 0, sizeof( joystickAxis ) );
+	int i, numEvents;
+	numEvents = Sys_PollJoyAxisEvents();
+	if ( numEvents ) {
+		for( i = 0; i < numEvents; i++ ) {
+			int axis, value;
+			Sys_ReturnJoyAxisEvent( i, axis, value );
+		}
+	}
+	Sys_EndJoyAxisEvents();
 }
-
 /*
 ================
 idUsercmdGenLocal::UsercmdInterrupt

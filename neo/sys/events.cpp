@@ -602,7 +602,7 @@ sysEvent_t Sys_GetEvent() {
 
 		case SDL_JOYAXISMOTION:
 			res.evType = SE_JOYSTICK_AXIS;
-			if( ev.jaxis.axis <= 6)
+			if( ev.jaxis.axis <= 4)
 			{
 				res.evValue = ev.jaxis.axis;
 				res.evValue2 = ev.jaxis.value;
@@ -610,6 +610,20 @@ sysEvent_t Sys_GetEvent() {
 				{
 					axis_polls.Append(axis_poll_t(AXIS_SIDE, ev.jaxis.value));
 				}
+				else if(res.evValue == 1)
+				{
+					axis_polls.Append(axis_poll_t(AXIS_FORWARD, ev.jaxis.value));
+				}
+				else if(res.evValue == 2)
+				{
+					axis_polls.Append(axis_poll_t(AXIS_UP, ev.jaxis.value));
+				}
+				else if(res.evValue == 3)
+				{
+					axis_polls.Append(axis_poll_t(AXIS_ROLL, ev.jaxis.value));
+				}
+				
+				
 				printf("%i,%i\n", ev.jaxis.axis, ev.jaxis.value);
 			}
 			return res;
@@ -804,8 +818,8 @@ void Sys_EndMouseInputEvents() {
 Sys_PollJoystickInputEvents
 ================
 */
-int Sys_PollJoystickInputEvents() {
-	return mouse_polls.Num();
+int Sys_PollJoyAxisEvents() {
+	return axis_polls.Num();
 }
 
 /*
@@ -813,7 +827,7 @@ int Sys_PollJoystickInputEvents() {
 Sys_ReturnJoystickInputEvent
 ================
 */
-int	Sys_ReturnJoystickInputEvent(const int n, int &axis, int &value) {
+int	Sys_ReturnJoyAxisEvent(const int n, int &axis, int &value) {
 	if (n >= axis_polls.Num())
 		return 0;
 
@@ -827,6 +841,6 @@ int	Sys_ReturnJoystickInputEvent(const int n, int &axis, int &value) {
 Sys_EndJoystickInputEvents
 ================
 */
-void Sys_EndJoystickInputEvents() {
+void Sys_EndJoyAxisEvents() {
 	axis_polls.SetNum(0, false);
 }

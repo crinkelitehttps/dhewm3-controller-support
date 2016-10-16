@@ -62,7 +62,7 @@ public:
 	virtual sysEvent_t		GenerateMouseButtonEvent( int button, bool down );
 	virtual sysEvent_t		GenerateMouseMoveEvent( int deltax, int deltay );
 	//myedit
-	virtual sysEvent_t		GenerateJoystickMoveEvent( int axis, int value );
+	virtual sysEvent_t		GenerateJoyAxisEvent( int axis, int value );
 	virtual void			OpenURL( const char *url, bool quit );
 	virtual void			StartProcess( const char *exeName, bool quit );
 };

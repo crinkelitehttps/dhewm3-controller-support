@@ -113,7 +113,7 @@ sysEvent_t idSysLocal::GenerateMouseMoveEvent( int deltax, int deltay ) {
 	return ev;
 }
 
-sysEvent_t idSysLocal::GenerateJoystickMoveEvent( int axis, int value ) {
+sysEvent_t idSysLocal::GenerateJoyAxisEvent( int axis, int value ) {
 	sysEvent_t ev;
 	ev.evType = SE_JOYSTICK_AXIS;
 	ev.evValue = axis;
