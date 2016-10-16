@@ -1046,7 +1046,9 @@ void idUsercmdGenLocal::Joystick( void ) {
 		for( i = 0; i < numEvents; i++ ) {
 			int axis, value;
 			Sys_ReturnJoyAxisEvent( i, axis, value );
-			joystickAxis[axis] = value / 100;
+			joystickAxis[axis] = static_cast<signed char>(value);
+			printf("%i\n", static_cast<signed char>(value));
+			//not what I'm looking for!! printf("%i",idMath::ClampChar(axis));
 		}
 	}
 	Sys_EndJoyAxisEvents();
