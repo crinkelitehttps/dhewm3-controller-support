@@ -606,24 +606,7 @@ sysEvent_t Sys_GetEvent() {
 			{
 				res.evValue = ev.jaxis.axis;
 				res.evValue2 = ev.jaxis.value;
-				if(res.evValue == 0)
-				{
-					axis_polls.Append(axis_poll_t(AXIS_SIDE, ev.jaxis.value));
-				}
-				else if(res.evValue == 1)
-				{
-					axis_polls.Append(axis_poll_t(AXIS_FORWARD, ev.jaxis.value));
-				}
-				else if(res.evValue == 2)
-				{
-					axis_polls.Append(axis_poll_t(AXIS_UP, ev.jaxis.value));
-				}
-				else if(res.evValue == 3)
-				{
-					axis_polls.Append(axis_poll_t(AXIS_ROLL, ev.jaxis.value));
-				}
-				
-				
+				axis_polls.Append(axis_poll_t(ev.jaxis.axis, ev.jaxis.value));
 				printf("%i,%i\n", ev.jaxis.axis, ev.jaxis.value);
 			}
 			return res;
@@ -815,7 +798,7 @@ void Sys_EndMouseInputEvents() {
 
 /*
 ================
-Sys_PollJoystickInputEvents
+Sys_PollJoyAxisEvents
 ================
 */
 int Sys_PollJoyAxisEvents() {
@@ -824,7 +807,7 @@ int Sys_PollJoyAxisEvents() {
 
 /*
 ================
-Sys_ReturnJoystickInputEvent
+Sys_ReturnJoyAxisEvent
 ================
 */
 int	Sys_ReturnJoyAxisEvent(const int n, int &axis, int &value) {
@@ -838,7 +821,7 @@ int	Sys_ReturnJoyAxisEvent(const int n, int &axis, int &value) {
 
 /*
 ================
-Sys_EndJoystickInputEvents
+Sys_EndJoyAxisEvents
 ================
 */
 void Sys_EndJoyAxisEvents() {
