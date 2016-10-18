@@ -607,7 +607,6 @@ sysEvent_t Sys_GetEvent() {
 				res.evValue = ev.jaxis.axis;
 				res.evValue2 = ev.jaxis.value;
 				axis_polls.Append(axis_poll_t(ev.jaxis.axis, ev.jaxis.value));
-				//printf("%i,%i\n", ev.jaxis.axis, ev.jaxis.value);
 			}
 			return res;
 #endif

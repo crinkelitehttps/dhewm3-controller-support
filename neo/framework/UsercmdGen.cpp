@@ -687,14 +687,14 @@ void idUsercmdGenLocal::JoystickMove( void ) {
 	}
 
 	if ( !ButtonState( UB_STRAFE ) ) {
-		viewangles[YAW] += anglespeed * in_yawSpeed.GetFloat() * joystickAxis[AXIS_SIDE];
-		viewangles[PITCH] += anglespeed * in_pitchSpeed.GetFloat() * joystickAxis[AXIS_FORWARD];
+		viewangles[YAW] += anglespeed * in_yawSpeed.GetFloat() * joystickAxis[RX_AXIS];
+		viewangles[PITCH] += anglespeed * in_pitchSpeed.GetFloat() * joystickAxis[RY_AXIS];
 	} else {
-		cmd.rightmove = idMath::ClampChar( cmd.rightmove + joystickAxis[AXIS_SIDE] );
-		cmd.forwardmove = idMath::ClampChar( cmd.forwardmove + joystickAxis[AXIS_FORWARD] );
+		cmd.rightmove = idMath::ClampChar( cmd.rightmove + joystickAxis[LX_AXIS] );
+		cmd.forwardmove = idMath::ClampChar( cmd.forwardmove + joystickAxis[LY_AXIS] );
 	}
 
-	cmd.upmove = idMath::ClampChar( cmd.upmove + joystickAxis[AXIS_UP] );
+	cmd.upmove = idMath::ClampChar( cmd.upmove + joystickAxis[RT_AXIS] );
 }
 
 /*
@@ -1047,8 +1047,7 @@ void idUsercmdGenLocal::Joystick( void ) {
 			int axis, value;
 			Sys_ReturnJoyAxisEvent( i, axis, value );
 			joystickAxis[axis] = static_cast<signed char>(value);
-			printf("%i\n", static_cast<signed char>(value));
-			//not what I'm looking for!! printf("%i",idMath::ClampChar(axis));
+			//printf("%i\n", static_cast<signed char>(value));
 		}
 	}
 	Sys_EndJoyAxisEvents();

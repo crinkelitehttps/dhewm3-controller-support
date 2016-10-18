@@ -44,12 +44,18 @@ typedef enum {
 } cpuid_t;
 
 typedef enum {
-	AXIS_SIDE,
-	AXIS_FORWARD,
-	AXIS_UP,
-	AXIS_ROLL,
-	AXIS_YAW,
-	AXIS_PITCH,
+	//AXIS_SIDE,
+	//AXIS_FORWARD,
+	//AXIS_UP,
+	//AXIS_ROLL,
+	//AXIS_YAW,
+	//AXIS_PITCH,
+	LX_AXIS,
+	LY_AXIS,
+	RX_AXIS,
+	RY_AXIS,
+	LT_AXIS,
+	RT_AXIS,
 	MAX_JOYSTICK_AXIS
 } joystickAxis_t;
 
