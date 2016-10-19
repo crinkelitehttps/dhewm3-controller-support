@@ -679,6 +679,7 @@ idUsercmdGenLocal::JoystickMove
 */
 void idUsercmdGenLocal::JoystickMove( void ) {
 	float	anglespeed;
+	int	invert = -1;
 
 	if ( toggled_run.on ^ ( in_alwaysRun.GetBool() && idAsyncNetwork::IsActive() ) ) {
 		anglespeed = idMath::M_MS2SEC * USERCMD_MSEC * in_angleSpeedKey.GetFloat();
@@ -687,7 +688,7 @@ void idUsercmdGenLocal::JoystickMove( void ) {
 	}
 
 	if ( !ButtonState( UB_STRAFE ) ) {
-		viewangles[YAW] += anglespeed * in_yawSpeed.GetFloat() * joystickAxis[RX_AXIS];
+		viewangles[YAW] += anglespeed * in_yawSpeed.GetFloat() * joystickAxis[RX_AXIS] * invert;
 		viewangles[PITCH] += anglespeed * in_pitchSpeed.GetFloat() * joystickAxis[RY_AXIS];
 	} else {
 		cmd.rightmove = idMath::ClampChar( cmd.rightmove + joystickAxis[LX_AXIS] );
@@ -695,6 +696,7 @@ void idUsercmdGenLocal::JoystickMove( void ) {
 	}
 
 	cmd.upmove = idMath::ClampChar( cmd.upmove + joystickAxis[RT_AXIS] );
+		
 }
 
 /*
@@ -788,7 +790,7 @@ void idUsercmdGenLocal::MakeCurrent( void ) {
 		MouseMove();
 
 		// get basic movement from joystick
-		JoystickMove();
+		JoystickMove();	
 
 		// check to make sure the angles haven't wrapped
 		if ( viewangles[PITCH] - oldAngles[PITCH] > 90 ) {
@@ -1039,15 +1041,14 @@ idUsercmdGenLocal::Joystick
 ===============
 */
 void idUsercmdGenLocal::Joystick( void ) {
-	memset( joystickAxis, 0, sizeof( joystickAxis ) );
+	//memset( joystickAxis, 0, sizeof( joystickAxis ) );
 	int i, numEvents;
 	numEvents = Sys_PollJoyAxisEvents();
 	if ( numEvents ) {
 		for( i = 0; i < numEvents; i++ ) {
 			int axis, value;
 			Sys_ReturnJoyAxisEvent( i, axis, value );
-			joystickAxis[axis] = static_cast<signed char>(value);
-			//printf("%i\n", static_cast<signed char>(value));
+			joystickAxis[axis] = value / 256 ;
 		}
 	}
 	Sys_EndJoyAxisEvents();
