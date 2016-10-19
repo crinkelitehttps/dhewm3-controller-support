@@ -680,6 +680,7 @@ idUsercmdGenLocal::JoystickMove
 void idUsercmdGenLocal::JoystickMove( void ) {
 	float	anglespeed;
 	int	invert = -1;
+	int	sens = 3;
 
 	if ( toggled_run.on ^ ( in_alwaysRun.GetBool() && idAsyncNetwork::IsActive() ) ) {
 		anglespeed = idMath::M_MS2SEC * USERCMD_MSEC * in_angleSpeedKey.GetFloat();
@@ -687,13 +688,10 @@ void idUsercmdGenLocal::JoystickMove( void ) {
 		anglespeed = idMath::M_MS2SEC * USERCMD_MSEC;
 	}
 
-	if ( !ButtonState( UB_STRAFE ) ) {
-		viewangles[YAW] += anglespeed * in_yawSpeed.GetFloat() * joystickAxis[RX_AXIS] * invert;
-		viewangles[PITCH] += anglespeed * in_pitchSpeed.GetFloat() * joystickAxis[RY_AXIS];
-	} else {
-		cmd.rightmove = idMath::ClampChar( cmd.rightmove + joystickAxis[LX_AXIS] );
-		cmd.forwardmove = idMath::ClampChar( cmd.forwardmove + joystickAxis[LY_AXIS] );
-	}
+	viewangles[YAW] += anglespeed * (in_yawSpeed.GetFloat() / sens) * joystickAxis[RX_AXIS] * invert;
+	viewangles[PITCH] += anglespeed * (in_pitchSpeed.GetFloat() / sens) * joystickAxis[RY_AXIS];
+	cmd.rightmove = idMath::ClampChar( cmd.rightmove + joystickAxis[LX_AXIS] );
+	cmd.forwardmove = idMath::ClampChar( cmd.forwardmove + joystickAxis[LY_AXIS] * invert );
 
 	cmd.upmove = idMath::ClampChar( cmd.upmove + joystickAxis[RT_AXIS] );
 		
