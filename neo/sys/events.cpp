@@ -271,6 +271,44 @@ static byte mapkey(SDL_Keycode key) {
 	return 0;
 }
 
+static byte mapjoy(int joybutton) {
+	switch(joybutton) {
+	case JB_SELECT:
+		return K_JOY1;
+	case JB_L3:
+		return K_JOY2;
+	case JB_R3:
+		return K_JOY3;
+	case JB_START:
+		return K_JOY4;
+	case JB_HAT_UP:
+		return K_JOY5;
+	case JB_HAT_RIGHT:
+		return K_JOY6;
+	case JB_HAT_DOWN:
+		return K_JOY7;
+	case JB_HAT_LEFT:
+		return K_JOY8;
+	case JB_TRIGGER_LEFT:
+		return K_JOY9;
+	case JB_TRIGGER_RIGHT:
+		return K_JOY10;
+	case JB_BUMPER_LEFT:
+		return K_JOY11;
+	case JB_BUMPER_RIGHT:
+		return K_JOY12;
+	case JB_FACE_N:
+		return K_JOY13;
+	case JB_FACE_E:
+		return K_JOY14;
+	case JB_FACE_S:
+		return K_JOY15;
+	case JB_FACE_W:
+		return K_JOY16;
+	}
+	return 0;
+}
+
 static void PushConsoleEvent(const char *s) {
 	char *b;
 	size_t len;
@@ -492,7 +530,10 @@ sysEvent_t Sys_GetEvent() {
 			continue; // handle next event
 #endif
 
+			
+	
 		case SDL_KEYDOWN:
+
 			if (ev.key.keysym.sym == SDLK_RETURN && (ev.key.keysym.mod & KMOD_ALT) > 0) {
 				cvarSystem->SetCVarBool("r_fullscreen", !renderSystem->IsFullScreen());
 				PushConsoleEvent("vid_restart");
@@ -501,21 +542,22 @@ sysEvent_t Sys_GetEvent() {
 
 			// fall through
 		case SDL_KEYUP:
+
 #if !SDL_VERSION_ATLEAST(2, 0, 0)
-			key = mapkey(ev.key.keysym.sym);
-			if (!key) {
-				unsigned char c;
-				// check if its an unmapped console key
-				if (ev.key.keysym.unicode == (c = Sys_GetConsoleKey(false))) {
-					key = c;
-				} else if (ev.key.keysym.unicode == (c = Sys_GetConsoleKey(true))) {
-					key = c;
-				} else {
-					if (ev.type == SDL_KEYDOWN)
-						common->Warning("unmapped SDL key %d (0x%x)", ev.key.keysym.sym, ev.key.keysym.unicode);
-					continue; // handle next event
+				key = mapkey(ev.key.keysym.sym);
+				if (!key) {
+					unsigned char c;
+					// check if its an unmapped console key
+					if (ev.key.keysym.unicode == (c = Sys_GetConsoleKey(false))) {
+						key = c;
+					} else if (ev.key.keysym.unicode == (c = Sys_GetConsoleKey(true))) {
+						key = c;
+					} else {
+						if (ev.type == SDL_KEYDOWN)
+							common->Warning("unmapped SDL key %d (0x%x)", ev.key.keysym.sym, ev.key.keysym.unicode);
+						continue; // handle next event
+					}
 				}
-			}
 #else
 		{
 			// workaround for AZERTY-keyboards, which don't have 1, 2, ..., 9, 0 in first row:
@@ -588,6 +630,31 @@ sysEvent_t Sys_GetEvent() {
 			continue;
 #endif
 
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+
+		case SDL_JOYAXISMOTION:
+			res.evType = SE_JOYSTICK_AXIS;
+			if( ev.jaxis.axis < MAX_JOYSTICK_AXIS )
+			{
+				res.evValue = ev.jaxis.axis;
+				res.evValue2 = ev.jaxis.value;
+				axis_polls.Append(axis_poll_t(ev.jaxis.axis, ev.jaxis.value));
+			}
+			return res;
+		
+		case SDL_JOYBUTTONDOWN:
+		case SDL_JOYBUTTONUP:
+
+			key = mapjoy(ev.jbutton.button);
+			res.evType = SE_KEY;
+			res.evValue = key;
+			res.evValue2 = ev.jbutton.state == SDL_PRESSED ? 1 : 0;
+ 
+			kbd_polls.Append(kbd_poll_t(key, ev.jbutton.state == SDL_PRESSED));
+			return res;
+
+#endif
+
 		case SDL_MOUSEMOTION:
 			res.evType = SE_MOUSE;
 			res.evValue = ev.motion.xrel;
@@ -598,18 +665,6 @@ sysEvent_t Sys_GetEvent() {
 
 			return res;
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-
-		case SDL_JOYAXISMOTION:
-			res.evType = SE_JOYSTICK_AXIS;
-			if( ev.jaxis.axis <= 4)
-			{
-				res.evValue = ev.jaxis.axis;
-				res.evValue2 = ev.jaxis.value;
-				axis_polls.Append(axis_poll_t(ev.jaxis.axis, ev.jaxis.value));
-			}
-			return res;
-#endif
 
 #if SDL_VERSION_ATLEAST(2, 0, 0)
 		case SDL_MOUSEWHEEL:

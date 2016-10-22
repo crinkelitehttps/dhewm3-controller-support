@@ -693,7 +693,7 @@ void idUsercmdGenLocal::JoystickMove( void ) {
 	cmd.rightmove = idMath::ClampChar( cmd.rightmove + joystickAxis[LX_AXIS] );
 	cmd.forwardmove = idMath::ClampChar( cmd.forwardmove + joystickAxis[LY_AXIS] * invert );
 
-	cmd.upmove = idMath::ClampChar( cmd.upmove + joystickAxis[RT_AXIS] );
+	//cmd.upmove = idMath::ClampChar( cmd.upmove + joystickAxis[RT_AXIS] );
 		
 }
 
