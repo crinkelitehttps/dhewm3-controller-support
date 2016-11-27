@@ -1046,19 +1046,19 @@ void idUsercmdGenLocal::Joystick( void ) {
 		for( i = 0; i < numEvents; i++ ) {
 			int axis, value;
 			Sys_ReturnJoyAxisEvent( i, axis, value );
-			double curve = 0.9;
 			double curve_value;
 			int min = 0;
 			int max = 35565;
 			double NormalizedValue = (double)(value - min) / (double)(max - min);
-			//curve_value = curve * (NormalizedValue * NormalizedValue * NormalizedValue)  + ( 1 - curve ) * NormalizedValue;
 			curve_value = NormalizedValue * NormalizedValue;
-			if( NormalizedValue > 0.6 )
-				toggled_run.SetKeyState( ButtonState( UB_SPEED ), true && idAsyncNetwork::IsActive() );
-			if( NormalizedValue < 0 )
-				joystickAxis[axis] = curve_value * -256;
+			if( axis > 1 ) {
+				if( NormalizedValue < 0 )
+					joystickAxis[axis] = curve_value * -256;
+				else
+					joystickAxis[axis] = curve_value * 256;
+			}
 			else
-				joystickAxis[axis] = curve_value * 256;
+				joystickAxis[axis] = value / 256;
 		}
 	}
 	Sys_EndJoyAxisEvents();

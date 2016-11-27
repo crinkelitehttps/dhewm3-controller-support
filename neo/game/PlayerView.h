@@ -78,6 +78,7 @@ public:
 
 	void				CalculateShake( void );
 
+
 	// this may involve rendering to a texture and displaying
 	// that with a warp model or in double vision mode
 	void				RenderPlayerView( idUserInterface *hud );
