@@ -79,7 +79,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #ifndef ID_ENFORCE_KEY
 #	if !defined( ID_DEDICATED )
-#		define ID_ENFORCE_KEY 1
+#		define ID_ENFORCE_KEY 0
 #	else
 #		define ID_ENFORCE_KEY 0
 #	endif
@@ -87,7 +87,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #ifndef ID_ENFORCE_KEY_CLIENT
 #	if ID_ENFORCE_KEY
-#		define ID_ENFORCE_KEY_CLIENT 1
+#		define ID_ENFORCE_KEY_CLIENT 0
 #	else
 #		define ID_ENFORCE_KEY_CLIENT 0
 #	endif
